@@ -20,14 +20,18 @@ class Personnage:
         return degats * facteur
     
     def subir_degats(self, valeur:int):
-        return self.vie - valeur
+        if self.vie < valeur :
+            self.vie = 0
+        else:
+            self.vie - valeur
+        return self.vie
     
     def attaquer(self,cible:Personnage):
         degats = self.calcul_degats_sur(cible)
+        print(self.nom + " inflige " + str(degats) + " dégâts à " + cible.nom + " (PV " + str(cible.vie) + "/" + str(cible.vie_max))
         return cible.subir_degats(degats)
     
-    
-        
-    
+
+
 
 
