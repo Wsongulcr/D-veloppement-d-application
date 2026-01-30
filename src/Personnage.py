@@ -1,10 +1,10 @@
 import random
 
 class Personnage:
-    def __init__(self, nom:str, vie_max:int, vie:int, force:int, arme:int, armure:int):
+    def __init__(self, nom:str, vie_max:int, force:int, arme:int = 0, armure:int = 0):
         self.nom = nom
         self.vie_max = vie_max
-        self.vie = vie
+        self.vie = vie_max
         self.force = force
         self.arme = arme
         self.armure = armure
@@ -14,19 +14,21 @@ class Personnage:
         return self.vie > 0
     
 
-    def calcul_degats_sur(self, cible: Personnage):
+    def calcul_degats_sur(self, cible: "Personnage"):
         facteur = random.uniform(1.00, 1.10)
         degats = (self.force + self.arme - self.armure)
         return degats * facteur
     
     def subir_degats(self, valeur:int):
         if self.vie < valeur :
+            tmp = self.vie
             self.vie = 0
+            return tmp
         else:
-            self.vie - valeur
-        return self.vie
+            self.vie = self.vie - valeur
+        return valeur
     
-    def attaquer(self,cible:Personnage):
+    def attaquer(self,cible:"Personnage"):
         degats = self.calcul_degats_sur(cible)
         print(self.nom + " inflige " + str(degats) + " dégâts à " + cible.nom + " (PV " + str(cible.vie) + "/" + str(cible.vie_max))
         return cible.subir_degats(degats)
