@@ -3,14 +3,39 @@ from src import Personnage
 from src.Hero import Hero
 from src.Ennemi import Ennemi
 
-def combat_tour_par_tour(joueur: Hero, ennemi: Ennemi, log: bool = True)-> Personnage:
-    """Exécute un combat. Renvoie le vainqueur (joueur ou ennemi). 
+def combat_tour_par_tour(joueur: Hero, ennemi: Ennemi, log: bool = True) -> Personnage:
+    """Exécute un combat et renvoie le vainqueur."""
+    tour = 1
     
-    **Paramètres**
-    - `joueur : Hero` : Personnage joueur.
-    - `ennemi : Ennemi` : Personnage ennemi.
-    - `log : bool` : Si `log == True`, affiche des messages pendant le combat, sinon aucun message. 
-    """ 
+    while joueur.est_vivant() and ennemi.est_vivant():
+        if log:
+            print(f"--- Tour {tour} ---")
+        
+        degats_infliges = joueur.attaquer(ennemi) 
+        
+        if log:
+            print(f"{joueur.nom} inflige {degats_infliges} dégâts à {ennemi.nom} (PV {ennemi.vie}/{ennemi.vie_max})")
+        
+        if not ennemi.est_vivant():
+            if log:
+                print(f"{ennemi.nom} est vaincu !")
+                print(f"{joueur.nom} gagne {ennemi.exp} XP.")
+            joueur.gagner_exp(ennemi.exp)
+            return joueur
+            
+        degats_subis = ennemi.attaquer(joueur)
+        
+        if log:
+            print(f"{ennemi.nom} inflige {degats_subis} dégâts à {joueur.nom} (PV {joueur.vie}/{joueur.vie_max})")
+        
+        if not joueur.est_vivant():
+            if log:
+                print(f"{joueur.nom} est vaincu")
+            return ennemi
+            
+        tour += 1
+        
+    return joueur if joueur.est_vivant() else ennemi
     
 if __name__ == "__main__":
     seed(44) # Pour des résultats reproductibles malgré l'aléatoire 

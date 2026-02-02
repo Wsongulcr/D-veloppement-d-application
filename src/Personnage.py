@@ -89,9 +89,8 @@ class Personnage:
         Returns:
             int: Le montant final de dégâts infligés à la cible.
         """
-        if self.vie == 0:
-            return cible.subir_degats(0)
+        if self.vie <= 0:
+            return 0
         else:
             degats = self.calcul_degats_sur(cible)
-            print(self.nom + " inflige " + str(degats) + " dégâts à " + cible.nom + " (PV " + str(cible.vie) + "/" + str(cible.vie_max))
             return cible.subir_degats(degats)
