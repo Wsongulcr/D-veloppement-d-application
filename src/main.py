@@ -1,4 +1,7 @@
 from random import seed
+from src import Personnage
+from src.Hero import Hero
+from src.Ennemi import Ennemi
 
 def combat_tour_par_tour(joueur: Hero, ennemi: Ennemi, log: bool = True)-> Personnage:
     """Exécute un combat. Renvoie le vainqueur (joueur ou ennemi). 
@@ -8,7 +11,6 @@ def combat_tour_par_tour(joueur: Hero, ennemi: Ennemi, log: bool = True)-> Perso
     - `ennemi : Ennemi` : Personnage ennemi.
     - `log : bool` : Si `log == True`, affiche des messages pendant le combat, sinon aucun message. 
     """ 
-    # CODE À COMPLÉTER 
     
 if __name__ == "__main__":
     seed(44) # Pour des résultats reproductibles malgré l'aléatoire 
