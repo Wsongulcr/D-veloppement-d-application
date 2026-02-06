@@ -4,7 +4,20 @@ from src.Hero import Hero
 from src.Ennemi import Ennemi
 
 def combat_tour_par_tour(joueur: Hero, ennemi: Ennemi, log: bool = True) -> Personnage:
-    """Exécute un combat et renvoie le vainqueur."""
+    """
+    Simule un combat tour par tour entre le joueur et un ennemi.
+    
+    Le joueur attaque toujours en premier. Le combat s'arrête quand l'un
+    des deux combattants n'a plus de vie.
+
+    Args:
+        joueur (Hero): Le héros contrôlé par le joueur.
+        ennemi (Ennemi): L'adversaire à combattre.
+        log (bool, optional): Si True, affiche le déroulement dans la console. Par défaut True.
+
+    Returns:
+        Personnage: L'objet représentant le vainqueur (joueur ou ennemi).
+    """
     tour = 1
     
     while joueur.est_vivant() and ennemi.est_vivant():

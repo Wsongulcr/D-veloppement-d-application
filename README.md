@@ -41,6 +41,6 @@ pytest
 
 ## Auteurs
 
-Sena Boz étudiante, Songul Cinar étudiante, Ceylan Cinar étudiant 
+Songul Cinar étudiante, Ceylan Cinar étudiant 
 
-@E3iyla @Wsongul.cr @CeylanCin
+@Wsongul.cr @CeylanCin
