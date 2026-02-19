@@ -1,6 +1,8 @@
 import math
 from random import uniform
-from src.Personnage import Personnage 
+from src.Personnage import Personnage
+from src.Inventaire import Inventaire
+from src.Objet import Consommable 
 
 class Hero(Personnage):
     """
@@ -23,6 +25,7 @@ class Hero(Personnage):
 
         self.niveau = 1
         self.exp = 0
+        self.inventaire = Inventaire()
 
     def exp_pour_prochain_niveau(self):
         """
@@ -80,4 +83,13 @@ class Hero(Personnage):
 
         while self.exp >= self.exp_pour_prochain_niveau():
             self.monter_niveau()
+
+    
+    def utiliser_objet(self, objet: Consommable, cible: "Personnage") -> None:
+        """
+        Utilise un objet consommable de l'inventaire sur une cible.
+        """
+        if self.inventaire.contient(objet):
+            objet.utiliser(cible)
+            self.inventaire.retirer(objet, 1)
             
