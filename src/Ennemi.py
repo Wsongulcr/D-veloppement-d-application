@@ -1,6 +1,7 @@
 import math
 from random import uniform
 from src.Personnage import Personnage 
+from src.Objet import Objet
 
 class Ennemi(Personnage):
     """
@@ -24,3 +25,5 @@ class Ennemi(Personnage):
         super().__init__(nom, vie_max, force, arme, armure)
 
         self.exp = exp
+
+        self.recompenses = []

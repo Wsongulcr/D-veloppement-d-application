@@ -94,3 +94,14 @@ class Personnage:
         else:
             degats = self.calcul_degats_sur(cible)
             return cible.subir_degats(degats)
+        
+    def soigner(self, valeur: int) -> int:
+        """
+        Restaure des points de vie au personnage sans dépasser la vie maximale.
+        """
+        if valeur <= 0 or not self.est_vivant():
+            return 0
+        
+        soin_effectif = min(valeur, self.vie_max - self.vie)
+        self.vie += soin_effectif
+        return soin_effectif
