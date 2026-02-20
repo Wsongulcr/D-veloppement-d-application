@@ -43,6 +43,9 @@
                                 <a class="variable" href="#Hero.exp">exp</a>
                         </li>
                         <li>
+                                <a class="variable" href="#Hero.inventaire">inventaire</a>
+                        </li>
+                        <li>
                                 <a class="function" href="#Hero.exp_pour_prochain_niveau">exp_pour_prochain_niveau</a>
                         </li>
                         <li>
@@ -50,6 +53,9 @@
                         </li>
                         <li>
                                 <a class="function" href="#Hero.gagner_exp">gagner_exp</a>
+                        </li>
+                        <li>
+                                <a class="function" href="#Hero.utiliser_objet">utiliser_objet</a>
                         </li>
                 </ul>
 
@@ -77,87 +83,80 @@
 
                         <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 </span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">uniform</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.Personnage</span><span class="w"> </span><span class="kn">import</span> <span class="n">Personnage</span> 
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Hero</span><span class="p">(</span><span class="n">Personnage</span><span class="p">):</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">    Classe représentant le héros du jeu.</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    </span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    Gère le système de niveaux, l&#39;expérience et l&#39;amélioration des statistiques.</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.Personnage</span><span class="w"> </span><span class="kn">import</span> <span class="n">Personnage</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.Inventaire</span><span class="w"> </span><span class="kn">import</span> <span class="n">Inventaire</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.Objet</span><span class="w"> </span><span class="kn">import</span> <span class="n">Consommable</span><span class="p">,</span> <span class="n">Arme</span><span class="p">,</span> <span class="n">Armure</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Hero</span><span class="p">(</span><span class="n">Personnage</span><span class="p">):</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    Classe représentant le héros du jeu avec son inventaire et son système de progression.</span>
 </span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="n">Arme</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="n">Armure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">        Initialise le héros au niveau 1 avec 0 expérience.</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">        Initialise le héros au niveau 1 avec un inventaire vide.</span>
 </span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a>
 </span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">        Args:</span>
 </span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">            nom (str): Le nom du héros.</span>
 </span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
 </span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">            arme (int, optional): Le bonus de l&#39;arme. Par défaut 0.</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">            armure (int, optional): La valeur d&#39;armure. Par défaut 0.</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">            arme (Arme, optional): L&#39;objet Arme équipé. Par défaut None.</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">            armure (Armure, optional): L&#39;objet Armure équipé. Par défaut None.</span>
 </span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span> <span class="o">=</span> <span class="n">Inventaire</span><span class="p">()</span>
 </span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">exp_pour_prochain_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">exp_pour_prochain_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="sd">        Calcule l&#39;expérience requise pour atteindre le niveau suivant.</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a><span class="sd">        </span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">        Formule : 100 * (niveau^2 + niveau).</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        Returns:</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a><span class="sd">            int: La quantité totale d&#39;XP nécessaire.</span>
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>        <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="p">)</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>    
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">monter_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        Fait passer le héros au niveau supérieur.</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a><span class="sd">        </span>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="sd">        Augmente le niveau de 1 et améliore les statistiques (vie_max, force,</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a><span class="sd">        arme, armure) d&#39;un pourcentage aléatoire entre 1% et 10%.</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="sd">        La vie est restaurée au maximum après l&#39;amélioration.</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">arme</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arme</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">armure</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">armure</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span>
+</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>
+</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a><span class="sd">        Returns:</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a><span class="sd">            int: La quantité totale d&#39;XP nécessaire.</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="p">)</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    
+</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">monter_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a><span class="sd">        Fait passer le héros au niveau supérieur.</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a><span class="sd">        Augmente les statistiques naturelles (vie_max, force) et restaure la vie.</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a>
+</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
+</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
+</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a>        
+</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a>
+</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">gagner_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantite</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a><span class="sd">        Ajoute de l&#39;expérience au héros et gère les montées de niveau.</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a><span class="sd">        Args:</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a><span class="sd">            quantite (int): La quantité d&#39;expérience gagnée.</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>        <span class="k">if</span> <span class="n">quantite</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a>            <span class="k">return</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">+=</span> <span class="n">quantite</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_pour_prochain_niveau</span><span class="p">():</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">monter_niveau</span><span class="p">()</span>
 </span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">gagner_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantite</span><span class="p">):</span>
+</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">utiliser_objet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objet</span><span class="p">:</span> <span class="n">Consommable</span><span class="p">,</span> <span class="n">cible</span><span class="p">:</span> <span class="n">Personnage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        Ajoute de l&#39;expérience au héros.</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a><span class="sd">        </span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">        Gère automatiquement la montée de niveau si l&#39;expérience accumulée</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">        dépasse le seuil requis (boucle while pour multiples niveaux).</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">        Args:</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="sd">            quantite (int): La quantité d&#39;expérience gagnée.</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>        <span class="k">if</span> <span class="n">quantite</span><span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>            <span class="k">return</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">+=</span> <span class="n">quantite</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_pour_prochain_niveau</span><span class="p">():</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">monter_niveau</span><span class="p">()</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>            
+</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a><span class="sd">        Utilise un objet consommable de l&#39;inventaire sur une cible.</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>
+</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a><span class="sd">        Args:</span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a><span class="sd">            objet (Consommable): L&#39;objet à utiliser.</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a><span class="sd">            cible (Personnage): Le personnage sur lequel appliquer l&#39;effet.</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span><span class="o">.</span><span class="n">contient</span><span class="p">(</span><span class="n">objet</span><span class="p">):</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>            <span class="n">objet</span><span class="o">.</span><span class="n">utiliser</span><span class="p">(</span><span class="n">cible</span><span class="p">)</span>
+</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span><span class="o">.</span><span class="n">retirer</span><span class="p">(</span><span class="n">objet</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -173,90 +172,80 @@
 
     </div>
     <a class="headerlink" href="#Hero"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero-6"><a href="#Hero-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Hero</span><span class="p">(</span><span class="n">Personnage</span><span class="p">):</span>
-</span><span id="Hero-7"><a href="#Hero-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Hero-8"><a href="#Hero-8"><span class="linenos"> 8</span></a><span class="sd">    Classe représentant le héros du jeu.</span>
-</span><span id="Hero-9"><a href="#Hero-9"><span class="linenos"> 9</span></a><span class="sd">    </span>
-</span><span id="Hero-10"><a href="#Hero-10"><span class="linenos">10</span></a><span class="sd">    Gère le système de niveaux, l&#39;expérience et l&#39;amélioration des statistiques.</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero-8"><a href="#Hero-8"><span class="linenos"> 8</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Hero</span><span class="p">(</span><span class="n">Personnage</span><span class="p">):</span>
+</span><span id="Hero-9"><a href="#Hero-9"><span class="linenos"> 9</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Hero-10"><a href="#Hero-10"><span class="linenos">10</span></a><span class="sd">    Classe représentant le héros du jeu avec son inventaire et son système de progression.</span>
 </span><span id="Hero-11"><a href="#Hero-11"><span class="linenos">11</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Hero-12"><a href="#Hero-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+</span><span id="Hero-12"><a href="#Hero-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="n">Arme</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="n">Armure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="Hero-13"><a href="#Hero-13"><span class="linenos">13</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Hero-14"><a href="#Hero-14"><span class="linenos">14</span></a><span class="sd">        Initialise le héros au niveau 1 avec 0 expérience.</span>
+</span><span id="Hero-14"><a href="#Hero-14"><span class="linenos">14</span></a><span class="sd">        Initialise le héros au niveau 1 avec un inventaire vide.</span>
 </span><span id="Hero-15"><a href="#Hero-15"><span class="linenos">15</span></a>
 </span><span id="Hero-16"><a href="#Hero-16"><span class="linenos">16</span></a><span class="sd">        Args:</span>
 </span><span id="Hero-17"><a href="#Hero-17"><span class="linenos">17</span></a><span class="sd">            nom (str): Le nom du héros.</span>
 </span><span id="Hero-18"><a href="#Hero-18"><span class="linenos">18</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
 </span><span id="Hero-19"><a href="#Hero-19"><span class="linenos">19</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
-</span><span id="Hero-20"><a href="#Hero-20"><span class="linenos">20</span></a><span class="sd">            arme (int, optional): Le bonus de l&#39;arme. Par défaut 0.</span>
-</span><span id="Hero-21"><a href="#Hero-21"><span class="linenos">21</span></a><span class="sd">            armure (int, optional): La valeur d&#39;armure. Par défaut 0.</span>
+</span><span id="Hero-20"><a href="#Hero-20"><span class="linenos">20</span></a><span class="sd">            arme (Arme, optional): L&#39;objet Arme équipé. Par défaut None.</span>
+</span><span id="Hero-21"><a href="#Hero-21"><span class="linenos">21</span></a><span class="sd">            armure (Armure, optional): L&#39;objet Armure équipé. Par défaut None.</span>
 </span><span id="Hero-22"><a href="#Hero-22"><span class="linenos">22</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Hero-23"><a href="#Hero-23"><span class="linenos">23</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
-</span><span id="Hero-24"><a href="#Hero-24"><span class="linenos">24</span></a>
-</span><span id="Hero-25"><a href="#Hero-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="Hero-26"><a href="#Hero-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="Hero-24"><a href="#Hero-24"><span class="linenos">24</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="Hero-25"><a href="#Hero-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="Hero-26"><a href="#Hero-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span> <span class="o">=</span> <span class="n">Inventaire</span><span class="p">()</span>
 </span><span id="Hero-27"><a href="#Hero-27"><span class="linenos">27</span></a>
-</span><span id="Hero-28"><a href="#Hero-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">exp_pour_prochain_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Hero-28"><a href="#Hero-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">exp_pour_prochain_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="Hero-29"><a href="#Hero-29"><span class="linenos">29</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Hero-30"><a href="#Hero-30"><span class="linenos">30</span></a><span class="sd">        Calcule l&#39;expérience requise pour atteindre le niveau suivant.</span>
-</span><span id="Hero-31"><a href="#Hero-31"><span class="linenos">31</span></a><span class="sd">        </span>
-</span><span id="Hero-32"><a href="#Hero-32"><span class="linenos">32</span></a><span class="sd">        Formule : 100 * (niveau^2 + niveau).</span>
-</span><span id="Hero-33"><a href="#Hero-33"><span class="linenos">33</span></a>
-</span><span id="Hero-34"><a href="#Hero-34"><span class="linenos">34</span></a><span class="sd">        Returns:</span>
-</span><span id="Hero-35"><a href="#Hero-35"><span class="linenos">35</span></a><span class="sd">            int: La quantité totale d&#39;XP nécessaire.</span>
-</span><span id="Hero-36"><a href="#Hero-36"><span class="linenos">36</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Hero-37"><a href="#Hero-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="p">)</span>
-</span><span id="Hero-38"><a href="#Hero-38"><span class="linenos">38</span></a>    
-</span><span id="Hero-39"><a href="#Hero-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">monter_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Hero-40"><a href="#Hero-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Hero-41"><a href="#Hero-41"><span class="linenos">41</span></a><span class="sd">        Fait passer le héros au niveau supérieur.</span>
-</span><span id="Hero-42"><a href="#Hero-42"><span class="linenos">42</span></a><span class="sd">        </span>
-</span><span id="Hero-43"><a href="#Hero-43"><span class="linenos">43</span></a><span class="sd">        Augmente le niveau de 1 et améliore les statistiques (vie_max, force,</span>
-</span><span id="Hero-44"><a href="#Hero-44"><span class="linenos">44</span></a><span class="sd">        arme, armure) d&#39;un pourcentage aléatoire entre 1% et 10%.</span>
-</span><span id="Hero-45"><a href="#Hero-45"><span class="linenos">45</span></a><span class="sd">        La vie est restaurée au maximum après l&#39;amélioration.</span>
-</span><span id="Hero-46"><a href="#Hero-46"><span class="linenos">46</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Hero-47"><a href="#Hero-47"><span class="linenos">47</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span id="Hero-48"><a href="#Hero-48"><span class="linenos">48</span></a>
-</span><span id="Hero-49"><a href="#Hero-49"><span class="linenos">49</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="Hero-50"><a href="#Hero-50"><span class="linenos">50</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="Hero-51"><a href="#Hero-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="Hero-52"><a href="#Hero-52"><span class="linenos">52</span></a>
-</span><span id="Hero-53"><a href="#Hero-53"><span class="linenos">53</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="Hero-54"><a href="#Hero-54"><span class="linenos">54</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="Hero-55"><a href="#Hero-55"><span class="linenos">55</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="Hero-56"><a href="#Hero-56"><span class="linenos">56</span></a>
-</span><span id="Hero-57"><a href="#Hero-57"><span class="linenos">57</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="Hero-58"><a href="#Hero-58"><span class="linenos">58</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="Hero-59"><a href="#Hero-59"><span class="linenos">59</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">arme</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arme</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="Hero-60"><a href="#Hero-60"><span class="linenos">60</span></a>
-</span><span id="Hero-61"><a href="#Hero-61"><span class="linenos">61</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="Hero-62"><a href="#Hero-62"><span class="linenos">62</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="Hero-63"><a href="#Hero-63"><span class="linenos">63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">armure</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">armure</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="Hero-64"><a href="#Hero-64"><span class="linenos">64</span></a>
-</span><span id="Hero-65"><a href="#Hero-65"><span class="linenos">65</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span>
+</span><span id="Hero-31"><a href="#Hero-31"><span class="linenos">31</span></a>
+</span><span id="Hero-32"><a href="#Hero-32"><span class="linenos">32</span></a><span class="sd">        Returns:</span>
+</span><span id="Hero-33"><a href="#Hero-33"><span class="linenos">33</span></a><span class="sd">            int: La quantité totale d&#39;XP nécessaire.</span>
+</span><span id="Hero-34"><a href="#Hero-34"><span class="linenos">34</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Hero-35"><a href="#Hero-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="p">)</span>
+</span><span id="Hero-36"><a href="#Hero-36"><span class="linenos">36</span></a>    
+</span><span id="Hero-37"><a href="#Hero-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">monter_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Hero-38"><a href="#Hero-38"><span class="linenos">38</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Hero-39"><a href="#Hero-39"><span class="linenos">39</span></a><span class="sd">        Fait passer le héros au niveau supérieur.</span>
+</span><span id="Hero-40"><a href="#Hero-40"><span class="linenos">40</span></a><span class="sd">        Augmente les statistiques naturelles (vie_max, force) et restaure la vie.</span>
+</span><span id="Hero-41"><a href="#Hero-41"><span class="linenos">41</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Hero-42"><a href="#Hero-42"><span class="linenos">42</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="Hero-43"><a href="#Hero-43"><span class="linenos">43</span></a>
+</span><span id="Hero-44"><a href="#Hero-44"><span class="linenos">44</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="Hero-45"><a href="#Hero-45"><span class="linenos">45</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+</span><span id="Hero-46"><a href="#Hero-46"><span class="linenos">46</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
+</span><span id="Hero-47"><a href="#Hero-47"><span class="linenos">47</span></a>
+</span><span id="Hero-48"><a href="#Hero-48"><span class="linenos">48</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="Hero-49"><a href="#Hero-49"><span class="linenos">49</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+</span><span id="Hero-50"><a href="#Hero-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
+</span><span id="Hero-51"><a href="#Hero-51"><span class="linenos">51</span></a>        
+</span><span id="Hero-52"><a href="#Hero-52"><span class="linenos">52</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span>
+</span><span id="Hero-53"><a href="#Hero-53"><span class="linenos">53</span></a>
+</span><span id="Hero-54"><a href="#Hero-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">gagner_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantite</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="Hero-55"><a href="#Hero-55"><span class="linenos">55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Hero-56"><a href="#Hero-56"><span class="linenos">56</span></a><span class="sd">        Ajoute de l&#39;expérience au héros et gère les montées de niveau.</span>
+</span><span id="Hero-57"><a href="#Hero-57"><span class="linenos">57</span></a>
+</span><span id="Hero-58"><a href="#Hero-58"><span class="linenos">58</span></a><span class="sd">        Args:</span>
+</span><span id="Hero-59"><a href="#Hero-59"><span class="linenos">59</span></a><span class="sd">            quantite (int): La quantité d&#39;expérience gagnée.</span>
+</span><span id="Hero-60"><a href="#Hero-60"><span class="linenos">60</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Hero-61"><a href="#Hero-61"><span class="linenos">61</span></a>        <span class="k">if</span> <span class="n">quantite</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Hero-62"><a href="#Hero-62"><span class="linenos">62</span></a>            <span class="k">return</span>
+</span><span id="Hero-63"><a href="#Hero-63"><span class="linenos">63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">+=</span> <span class="n">quantite</span>
+</span><span id="Hero-64"><a href="#Hero-64"><span class="linenos">64</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_pour_prochain_niveau</span><span class="p">():</span>
+</span><span id="Hero-65"><a href="#Hero-65"><span class="linenos">65</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">monter_niveau</span><span class="p">()</span>
 </span><span id="Hero-66"><a href="#Hero-66"><span class="linenos">66</span></a>
-</span><span id="Hero-67"><a href="#Hero-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">gagner_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantite</span><span class="p">):</span>
+</span><span id="Hero-67"><a href="#Hero-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">utiliser_objet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objet</span><span class="p">:</span> <span class="n">Consommable</span><span class="p">,</span> <span class="n">cible</span><span class="p">:</span> <span class="n">Personnage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 </span><span id="Hero-68"><a href="#Hero-68"><span class="linenos">68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Hero-69"><a href="#Hero-69"><span class="linenos">69</span></a><span class="sd">        Ajoute de l&#39;expérience au héros.</span>
-</span><span id="Hero-70"><a href="#Hero-70"><span class="linenos">70</span></a><span class="sd">        </span>
-</span><span id="Hero-71"><a href="#Hero-71"><span class="linenos">71</span></a><span class="sd">        Gère automatiquement la montée de niveau si l&#39;expérience accumulée</span>
-</span><span id="Hero-72"><a href="#Hero-72"><span class="linenos">72</span></a><span class="sd">        dépasse le seuil requis (boucle while pour multiples niveaux).</span>
-</span><span id="Hero-73"><a href="#Hero-73"><span class="linenos">73</span></a>
-</span><span id="Hero-74"><a href="#Hero-74"><span class="linenos">74</span></a><span class="sd">        Args:</span>
-</span><span id="Hero-75"><a href="#Hero-75"><span class="linenos">75</span></a><span class="sd">            quantite (int): La quantité d&#39;expérience gagnée.</span>
-</span><span id="Hero-76"><a href="#Hero-76"><span class="linenos">76</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Hero-77"><a href="#Hero-77"><span class="linenos">77</span></a>        <span class="k">if</span> <span class="n">quantite</span><span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="Hero-78"><a href="#Hero-78"><span class="linenos">78</span></a>            <span class="k">return</span>
-</span><span id="Hero-79"><a href="#Hero-79"><span class="linenos">79</span></a>        
-</span><span id="Hero-80"><a href="#Hero-80"><span class="linenos">80</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">+=</span> <span class="n">quantite</span>
-</span><span id="Hero-81"><a href="#Hero-81"><span class="linenos">81</span></a>
-</span><span id="Hero-82"><a href="#Hero-82"><span class="linenos">82</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_pour_prochain_niveau</span><span class="p">():</span>
-</span><span id="Hero-83"><a href="#Hero-83"><span class="linenos">83</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">monter_niveau</span><span class="p">()</span>
+</span><span id="Hero-69"><a href="#Hero-69"><span class="linenos">69</span></a><span class="sd">        Utilise un objet consommable de l&#39;inventaire sur une cible.</span>
+</span><span id="Hero-70"><a href="#Hero-70"><span class="linenos">70</span></a>
+</span><span id="Hero-71"><a href="#Hero-71"><span class="linenos">71</span></a><span class="sd">        Args:</span>
+</span><span id="Hero-72"><a href="#Hero-72"><span class="linenos">72</span></a><span class="sd">            objet (Consommable): L&#39;objet à utiliser.</span>
+</span><span id="Hero-73"><a href="#Hero-73"><span class="linenos">73</span></a><span class="sd">            cible (Personnage): Le personnage sur lequel appliquer l&#39;effet.</span>
+</span><span id="Hero-74"><a href="#Hero-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Hero-75"><a href="#Hero-75"><span class="linenos">75</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span><span class="o">.</span><span class="n">contient</span><span class="p">(</span><span class="n">objet</span><span class="p">):</span>
+</span><span id="Hero-76"><a href="#Hero-76"><span class="linenos">76</span></a>            <span class="n">objet</span><span class="o">.</span><span class="n">utiliser</span><span class="p">(</span><span class="n">cible</span><span class="p">)</span>
+</span><span id="Hero-77"><a href="#Hero-77"><span class="linenos">77</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span><span class="o">.</span><span class="n">retirer</span><span class="p">(</span><span class="n">objet</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Classe représentant le héros du jeu.</p>
-
-<p>Gère le système de niveaux, l'expérience et l'amélioration des statistiques.</p>
+            <div class="docstring"><p>Classe représentant le héros du jeu avec son inventaire et son système de progression.</p>
 </div>
 
 
@@ -264,38 +253,38 @@
                                         <input id="Hero.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">Hero</span><span class="signature pdoc-code condensed">(<span class="param"><span class="n">nom</span><span class="p">:</span> <span class="nb">str</span>, </span><span class="param"><span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">force</span><span class="p">:</span> <span class="nb">int</span>, </span><span class="param"><span class="n">arme</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>, </span><span class="param"><span class="n">armure</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span></span>)</span>
+        <span class="name">Hero</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">nom</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">force</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">arme</span><span class="p">:</span> <span class="n"><a href="Objet.html#Arme">src.Objet.Arme</a></span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">armure</span><span class="p">:</span> <span class="n"><a href="Objet.html#Armure">src.Objet.Armure</a></span> <span class="o">=</span> <span class="kc">None</span></span>)</span>
 
                 <label class="view-source-button" for="Hero.__init__-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Hero.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.__init__-12"><a href="#Hero.__init__-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span><span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span><span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span><span class="nb">int</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.__init__-12"><a href="#Hero.__init__-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="n">Arme</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="n">Armure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 </span><span id="Hero.__init__-13"><a href="#Hero.__init__-13"><span class="linenos">13</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Hero.__init__-14"><a href="#Hero.__init__-14"><span class="linenos">14</span></a><span class="sd">        Initialise le héros au niveau 1 avec 0 expérience.</span>
+</span><span id="Hero.__init__-14"><a href="#Hero.__init__-14"><span class="linenos">14</span></a><span class="sd">        Initialise le héros au niveau 1 avec un inventaire vide.</span>
 </span><span id="Hero.__init__-15"><a href="#Hero.__init__-15"><span class="linenos">15</span></a>
 </span><span id="Hero.__init__-16"><a href="#Hero.__init__-16"><span class="linenos">16</span></a><span class="sd">        Args:</span>
 </span><span id="Hero.__init__-17"><a href="#Hero.__init__-17"><span class="linenos">17</span></a><span class="sd">            nom (str): Le nom du héros.</span>
 </span><span id="Hero.__init__-18"><a href="#Hero.__init__-18"><span class="linenos">18</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
 </span><span id="Hero.__init__-19"><a href="#Hero.__init__-19"><span class="linenos">19</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
-</span><span id="Hero.__init__-20"><a href="#Hero.__init__-20"><span class="linenos">20</span></a><span class="sd">            arme (int, optional): Le bonus de l&#39;arme. Par défaut 0.</span>
-</span><span id="Hero.__init__-21"><a href="#Hero.__init__-21"><span class="linenos">21</span></a><span class="sd">            armure (int, optional): La valeur d&#39;armure. Par défaut 0.</span>
+</span><span id="Hero.__init__-20"><a href="#Hero.__init__-20"><span class="linenos">20</span></a><span class="sd">            arme (Arme, optional): L&#39;objet Arme équipé. Par défaut None.</span>
+</span><span id="Hero.__init__-21"><a href="#Hero.__init__-21"><span class="linenos">21</span></a><span class="sd">            armure (Armure, optional): L&#39;objet Armure équipé. Par défaut None.</span>
 </span><span id="Hero.__init__-22"><a href="#Hero.__init__-22"><span class="linenos">22</span></a><span class="sd">        &quot;&quot;&quot;</span>
 </span><span id="Hero.__init__-23"><a href="#Hero.__init__-23"><span class="linenos">23</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
-</span><span id="Hero.__init__-24"><a href="#Hero.__init__-24"><span class="linenos">24</span></a>
-</span><span id="Hero.__init__-25"><a href="#Hero.__init__-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">=</span> <span class="mi">1</span>
-</span><span id="Hero.__init__-26"><a href="#Hero.__init__-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="Hero.__init__-24"><a href="#Hero.__init__-24"><span class="linenos">24</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">=</span> <span class="mi">1</span>
+</span><span id="Hero.__init__-25"><a href="#Hero.__init__-25"><span class="linenos">25</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="mi">0</span>
+</span><span id="Hero.__init__-26"><a href="#Hero.__init__-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span> <span class="o">=</span> <span class="n">Inventaire</span><span class="p">()</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Initialise le héros au niveau 1 avec 0 expérience.</p>
+            <div class="docstring"><p>Initialise le héros au niveau 1 avec un inventaire vide.</p>
 
 <p>Args:
     nom (str): Le nom du héros.
     vie_max (int): Les points de vie maximums.
     force (int): La force d'attaque de base.
-    arme (int, optional): Le bonus de l'arme. Par défaut 0.
-    armure (int, optional): La valeur d'armure. Par défaut 0.</p>
+    arme (Arme, optional): L'objet Arme équipé. Par défaut None.
+    armure (Armure, optional): L'objet Armure équipé. Par défaut None.</p>
 </div>
 
 
@@ -322,33 +311,40 @@
     
 
                             </div>
+                            <div id="Hero.inventaire" class="classattr">
+                                <div class="attr variable">
+            <span class="name">inventaire</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Hero.inventaire"></a>
+    
+    
+
+                            </div>
                             <div id="Hero.exp_pour_prochain_niveau" class="classattr">
                                         <input id="Hero.exp_pour_prochain_niveau-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">exp_pour_prochain_niveau</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">):</span></span>
+        <span class="name">exp_pour_prochain_niveau</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span></span><span class="return-annotation">) -> <span class="nb">int</span>:</span></span>
 
                 <label class="view-source-button" for="Hero.exp_pour_prochain_niveau-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Hero.exp_pour_prochain_niveau"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.exp_pour_prochain_niveau-28"><a href="#Hero.exp_pour_prochain_niveau-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">exp_pour_prochain_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.exp_pour_prochain_niveau-28"><a href="#Hero.exp_pour_prochain_niveau-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">exp_pour_prochain_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 </span><span id="Hero.exp_pour_prochain_niveau-29"><a href="#Hero.exp_pour_prochain_niveau-29"><span class="linenos">29</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 </span><span id="Hero.exp_pour_prochain_niveau-30"><a href="#Hero.exp_pour_prochain_niveau-30"><span class="linenos">30</span></a><span class="sd">        Calcule l&#39;expérience requise pour atteindre le niveau suivant.</span>
-</span><span id="Hero.exp_pour_prochain_niveau-31"><a href="#Hero.exp_pour_prochain_niveau-31"><span class="linenos">31</span></a><span class="sd">        </span>
-</span><span id="Hero.exp_pour_prochain_niveau-32"><a href="#Hero.exp_pour_prochain_niveau-32"><span class="linenos">32</span></a><span class="sd">        Formule : 100 * (niveau^2 + niveau).</span>
-</span><span id="Hero.exp_pour_prochain_niveau-33"><a href="#Hero.exp_pour_prochain_niveau-33"><span class="linenos">33</span></a>
-</span><span id="Hero.exp_pour_prochain_niveau-34"><a href="#Hero.exp_pour_prochain_niveau-34"><span class="linenos">34</span></a><span class="sd">        Returns:</span>
-</span><span id="Hero.exp_pour_prochain_niveau-35"><a href="#Hero.exp_pour_prochain_niveau-35"><span class="linenos">35</span></a><span class="sd">            int: La quantité totale d&#39;XP nécessaire.</span>
-</span><span id="Hero.exp_pour_prochain_niveau-36"><a href="#Hero.exp_pour_prochain_niveau-36"><span class="linenos">36</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Hero.exp_pour_prochain_niveau-37"><a href="#Hero.exp_pour_prochain_niveau-37"><span class="linenos">37</span></a>        <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="p">)</span>
+</span><span id="Hero.exp_pour_prochain_niveau-31"><a href="#Hero.exp_pour_prochain_niveau-31"><span class="linenos">31</span></a>
+</span><span id="Hero.exp_pour_prochain_niveau-32"><a href="#Hero.exp_pour_prochain_niveau-32"><span class="linenos">32</span></a><span class="sd">        Returns:</span>
+</span><span id="Hero.exp_pour_prochain_niveau-33"><a href="#Hero.exp_pour_prochain_niveau-33"><span class="linenos">33</span></a><span class="sd">            int: La quantité totale d&#39;XP nécessaire.</span>
+</span><span id="Hero.exp_pour_prochain_niveau-34"><a href="#Hero.exp_pour_prochain_niveau-34"><span class="linenos">34</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Hero.exp_pour_prochain_niveau-35"><a href="#Hero.exp_pour_prochain_niveau-35"><span class="linenos">35</span></a>        <span class="k">return</span> <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span><span class="p">)</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Calcule l'expérience requise pour atteindre le niveau suivant.</p>
-
-<p>Formule : 100 * (niveau^2 + niveau).</p>
 
 <p>Returns:
     int: La quantité totale d'XP nécessaire.</p>
@@ -367,41 +363,27 @@
 
     </div>
     <a class="headerlink" href="#Hero.monter_niveau"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.monter_niveau-39"><a href="#Hero.monter_niveau-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">monter_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="Hero.monter_niveau-40"><a href="#Hero.monter_niveau-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Hero.monter_niveau-41"><a href="#Hero.monter_niveau-41"><span class="linenos">41</span></a><span class="sd">        Fait passer le héros au niveau supérieur.</span>
-</span><span id="Hero.monter_niveau-42"><a href="#Hero.monter_niveau-42"><span class="linenos">42</span></a><span class="sd">        </span>
-</span><span id="Hero.monter_niveau-43"><a href="#Hero.monter_niveau-43"><span class="linenos">43</span></a><span class="sd">        Augmente le niveau de 1 et améliore les statistiques (vie_max, force,</span>
-</span><span id="Hero.monter_niveau-44"><a href="#Hero.monter_niveau-44"><span class="linenos">44</span></a><span class="sd">        arme, armure) d&#39;un pourcentage aléatoire entre 1% et 10%.</span>
-</span><span id="Hero.monter_niveau-45"><a href="#Hero.monter_niveau-45"><span class="linenos">45</span></a><span class="sd">        La vie est restaurée au maximum après l&#39;amélioration.</span>
-</span><span id="Hero.monter_niveau-46"><a href="#Hero.monter_niveau-46"><span class="linenos">46</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Hero.monter_niveau-47"><a href="#Hero.monter_niveau-47"><span class="linenos">47</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span id="Hero.monter_niveau-48"><a href="#Hero.monter_niveau-48"><span class="linenos">48</span></a>
-</span><span id="Hero.monter_niveau-49"><a href="#Hero.monter_niveau-49"><span class="linenos">49</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-50"><a href="#Hero.monter_niveau-50"><span class="linenos">50</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-51"><a href="#Hero.monter_niveau-51"><span class="linenos">51</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-52"><a href="#Hero.monter_niveau-52"><span class="linenos">52</span></a>
-</span><span id="Hero.monter_niveau-53"><a href="#Hero.monter_niveau-53"><span class="linenos">53</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-54"><a href="#Hero.monter_niveau-54"><span class="linenos">54</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-55"><a href="#Hero.monter_niveau-55"><span class="linenos">55</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-56"><a href="#Hero.monter_niveau-56"><span class="linenos">56</span></a>
-</span><span id="Hero.monter_niveau-57"><a href="#Hero.monter_niveau-57"><span class="linenos">57</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-58"><a href="#Hero.monter_niveau-58"><span class="linenos">58</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-59"><a href="#Hero.monter_niveau-59"><span class="linenos">59</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">arme</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arme</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-60"><a href="#Hero.monter_niveau-60"><span class="linenos">60</span></a>
-</span><span id="Hero.monter_niveau-61"><a href="#Hero.monter_niveau-61"><span class="linenos">61</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-62"><a href="#Hero.monter_niveau-62"><span class="linenos">62</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-63"><a href="#Hero.monter_niveau-63"><span class="linenos">63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">armure</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">armure</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
-</span><span id="Hero.monter_niveau-64"><a href="#Hero.monter_niveau-64"><span class="linenos">64</span></a>
-</span><span id="Hero.monter_niveau-65"><a href="#Hero.monter_niveau-65"><span class="linenos">65</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.monter_niveau-37"><a href="#Hero.monter_niveau-37"><span class="linenos">37</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">monter_niveau</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="Hero.monter_niveau-38"><a href="#Hero.monter_niveau-38"><span class="linenos">38</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Hero.monter_niveau-39"><a href="#Hero.monter_niveau-39"><span class="linenos">39</span></a><span class="sd">        Fait passer le héros au niveau supérieur.</span>
+</span><span id="Hero.monter_niveau-40"><a href="#Hero.monter_niveau-40"><span class="linenos">40</span></a><span class="sd">        Augmente les statistiques naturelles (vie_max, force) et restaure la vie.</span>
+</span><span id="Hero.monter_niveau-41"><a href="#Hero.monter_niveau-41"><span class="linenos">41</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Hero.monter_niveau-42"><a href="#Hero.monter_niveau-42"><span class="linenos">42</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">niveau</span> <span class="o">+=</span> <span class="mi">1</span>
+</span><span id="Hero.monter_niveau-43"><a href="#Hero.monter_niveau-43"><span class="linenos">43</span></a>
+</span><span id="Hero.monter_niveau-44"><a href="#Hero.monter_niveau-44"><span class="linenos">44</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="Hero.monter_niveau-45"><a href="#Hero.monter_niveau-45"><span class="linenos">45</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+</span><span id="Hero.monter_niveau-46"><a href="#Hero.monter_niveau-46"><span class="linenos">46</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
+</span><span id="Hero.monter_niveau-47"><a href="#Hero.monter_niveau-47"><span class="linenos">47</span></a>
+</span><span id="Hero.monter_niveau-48"><a href="#Hero.monter_niveau-48"><span class="linenos">48</span></a>        <span class="n">pourcentage</span> <span class="o">=</span> <span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="Hero.monter_niveau-49"><a href="#Hero.monter_niveau-49"><span class="linenos">49</span></a>        <span class="n">facteur</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pourcentage</span> <span class="o">/</span> <span class="mi">100</span><span class="p">)</span>
+</span><span id="Hero.monter_niveau-50"><a href="#Hero.monter_niveau-50"><span class="linenos">50</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">force</span> <span class="o">*</span> <span class="n">facteur</span><span class="p">)</span>
+</span><span id="Hero.monter_niveau-51"><a href="#Hero.monter_niveau-51"><span class="linenos">51</span></a>        
+</span><span id="Hero.monter_niveau-52"><a href="#Hero.monter_niveau-52"><span class="linenos">52</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">vie</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">vie_max</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Fait passer le héros au niveau supérieur.</p>
-
-<p>Augmente le niveau de 1 et améliore les statistiques (vie_max, force,
-arme, armure) d'un pourcentage aléatoire entre 1% et 10%.
-La vie est restaurée au maximum après l'amélioration.</p>
+            <div class="docstring"><p>Fait passer le héros au niveau supérieur.
+Augmente les statistiques naturelles (vie_max, force) et restaure la vie.</p>
 </div>
 
 
@@ -411,39 +393,65 @@ La vie est restaurée au maximum après l'amélioration.</p>
 <div class="attr function">
             
         <span class="def">def</span>
-        <span class="name">gagner_exp</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">quantite</span></span><span class="return-annotation">):</span></span>
+        <span class="name">gagner_exp</span><span class="signature pdoc-code condensed">(<span class="param"><span class="bp">self</span>, </span><span class="param"><span class="n">quantite</span><span class="p">:</span> <span class="nb">int</span></span><span class="return-annotation">):</span></span>
 
                 <label class="view-source-button" for="Hero.gagner_exp-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Hero.gagner_exp"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.gagner_exp-67"><a href="#Hero.gagner_exp-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">gagner_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantite</span><span class="p">):</span>
-</span><span id="Hero.gagner_exp-68"><a href="#Hero.gagner_exp-68"><span class="linenos">68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Hero.gagner_exp-69"><a href="#Hero.gagner_exp-69"><span class="linenos">69</span></a><span class="sd">        Ajoute de l&#39;expérience au héros.</span>
-</span><span id="Hero.gagner_exp-70"><a href="#Hero.gagner_exp-70"><span class="linenos">70</span></a><span class="sd">        </span>
-</span><span id="Hero.gagner_exp-71"><a href="#Hero.gagner_exp-71"><span class="linenos">71</span></a><span class="sd">        Gère automatiquement la montée de niveau si l&#39;expérience accumulée</span>
-</span><span id="Hero.gagner_exp-72"><a href="#Hero.gagner_exp-72"><span class="linenos">72</span></a><span class="sd">        dépasse le seuil requis (boucle while pour multiples niveaux).</span>
-</span><span id="Hero.gagner_exp-73"><a href="#Hero.gagner_exp-73"><span class="linenos">73</span></a>
-</span><span id="Hero.gagner_exp-74"><a href="#Hero.gagner_exp-74"><span class="linenos">74</span></a><span class="sd">        Args:</span>
-</span><span id="Hero.gagner_exp-75"><a href="#Hero.gagner_exp-75"><span class="linenos">75</span></a><span class="sd">            quantite (int): La quantité d&#39;expérience gagnée.</span>
-</span><span id="Hero.gagner_exp-76"><a href="#Hero.gagner_exp-76"><span class="linenos">76</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Hero.gagner_exp-77"><a href="#Hero.gagner_exp-77"><span class="linenos">77</span></a>        <span class="k">if</span> <span class="n">quantite</span><span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-</span><span id="Hero.gagner_exp-78"><a href="#Hero.gagner_exp-78"><span class="linenos">78</span></a>            <span class="k">return</span>
-</span><span id="Hero.gagner_exp-79"><a href="#Hero.gagner_exp-79"><span class="linenos">79</span></a>        
-</span><span id="Hero.gagner_exp-80"><a href="#Hero.gagner_exp-80"><span class="linenos">80</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">+=</span> <span class="n">quantite</span>
-</span><span id="Hero.gagner_exp-81"><a href="#Hero.gagner_exp-81"><span class="linenos">81</span></a>
-</span><span id="Hero.gagner_exp-82"><a href="#Hero.gagner_exp-82"><span class="linenos">82</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_pour_prochain_niveau</span><span class="p">():</span>
-</span><span id="Hero.gagner_exp-83"><a href="#Hero.gagner_exp-83"><span class="linenos">83</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">monter_niveau</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.gagner_exp-54"><a href="#Hero.gagner_exp-54"><span class="linenos">54</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">gagner_exp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quantite</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+</span><span id="Hero.gagner_exp-55"><a href="#Hero.gagner_exp-55"><span class="linenos">55</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Hero.gagner_exp-56"><a href="#Hero.gagner_exp-56"><span class="linenos">56</span></a><span class="sd">        Ajoute de l&#39;expérience au héros et gère les montées de niveau.</span>
+</span><span id="Hero.gagner_exp-57"><a href="#Hero.gagner_exp-57"><span class="linenos">57</span></a>
+</span><span id="Hero.gagner_exp-58"><a href="#Hero.gagner_exp-58"><span class="linenos">58</span></a><span class="sd">        Args:</span>
+</span><span id="Hero.gagner_exp-59"><a href="#Hero.gagner_exp-59"><span class="linenos">59</span></a><span class="sd">            quantite (int): La quantité d&#39;expérience gagnée.</span>
+</span><span id="Hero.gagner_exp-60"><a href="#Hero.gagner_exp-60"><span class="linenos">60</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Hero.gagner_exp-61"><a href="#Hero.gagner_exp-61"><span class="linenos">61</span></a>        <span class="k">if</span> <span class="n">quantite</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+</span><span id="Hero.gagner_exp-62"><a href="#Hero.gagner_exp-62"><span class="linenos">62</span></a>            <span class="k">return</span>
+</span><span id="Hero.gagner_exp-63"><a href="#Hero.gagner_exp-63"><span class="linenos">63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">+=</span> <span class="n">quantite</span>
+</span><span id="Hero.gagner_exp-64"><a href="#Hero.gagner_exp-64"><span class="linenos">64</span></a>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exp_pour_prochain_niveau</span><span class="p">():</span>
+</span><span id="Hero.gagner_exp-65"><a href="#Hero.gagner_exp-65"><span class="linenos">65</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">monter_niveau</span><span class="p">()</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Ajoute de l'expérience au héros.</p>
-
-<p>Gère automatiquement la montée de niveau si l'expérience accumulée
-dépasse le seuil requis (boucle while pour multiples niveaux).</p>
+            <div class="docstring"><p>Ajoute de l'expérience au héros et gère les montées de niveau.</p>
 
 <p>Args:
     quantite (int): La quantité d'expérience gagnée.</p>
+</div>
+
+
+                            </div>
+                            <div id="Hero.utiliser_objet" class="classattr">
+                                        <input id="Hero.utiliser_objet-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
+<div class="attr function">
+            
+        <span class="def">def</span>
+        <span class="name">utiliser_objet</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="bp">self</span>,</span><span class="param">	<span class="n">objet</span><span class="p">:</span> <span class="n"><a href="Objet.html#Consommable">src.Objet.Consommable</a></span>,</span><span class="param">	<span class="n">cible</span><span class="p">:</span> <span class="n"><a href="Personnage.html#Personnage">src.Personnage.Personnage</a></span></span><span class="return-annotation">) -> <span class="kc">None</span>:</span></span>
+
+                <label class="view-source-button" for="Hero.utiliser_objet-view-source"><span>View Source</span></label>
+
+    </div>
+    <a class="headerlink" href="#Hero.utiliser_objet"></a>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Hero.utiliser_objet-67"><a href="#Hero.utiliser_objet-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">utiliser_objet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objet</span><span class="p">:</span> <span class="n">Consommable</span><span class="p">,</span> <span class="n">cible</span><span class="p">:</span> <span class="n">Personnage</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+</span><span id="Hero.utiliser_objet-68"><a href="#Hero.utiliser_objet-68"><span class="linenos">68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Hero.utiliser_objet-69"><a href="#Hero.utiliser_objet-69"><span class="linenos">69</span></a><span class="sd">        Utilise un objet consommable de l&#39;inventaire sur une cible.</span>
+</span><span id="Hero.utiliser_objet-70"><a href="#Hero.utiliser_objet-70"><span class="linenos">70</span></a>
+</span><span id="Hero.utiliser_objet-71"><a href="#Hero.utiliser_objet-71"><span class="linenos">71</span></a><span class="sd">        Args:</span>
+</span><span id="Hero.utiliser_objet-72"><a href="#Hero.utiliser_objet-72"><span class="linenos">72</span></a><span class="sd">            objet (Consommable): L&#39;objet à utiliser.</span>
+</span><span id="Hero.utiliser_objet-73"><a href="#Hero.utiliser_objet-73"><span class="linenos">73</span></a><span class="sd">            cible (Personnage): Le personnage sur lequel appliquer l&#39;effet.</span>
+</span><span id="Hero.utiliser_objet-74"><a href="#Hero.utiliser_objet-74"><span class="linenos">74</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Hero.utiliser_objet-75"><a href="#Hero.utiliser_objet-75"><span class="linenos">75</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span><span class="o">.</span><span class="n">contient</span><span class="p">(</span><span class="n">objet</span><span class="p">):</span>
+</span><span id="Hero.utiliser_objet-76"><a href="#Hero.utiliser_objet-76"><span class="linenos">76</span></a>            <span class="n">objet</span><span class="o">.</span><span class="n">utiliser</span><span class="p">(</span><span class="n">cible</span><span class="p">)</span>
+</span><span id="Hero.utiliser_objet-77"><a href="#Hero.utiliser_objet-77"><span class="linenos">77</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">inventaire</span><span class="o">.</span><span class="n">retirer</span><span class="p">(</span><span class="n">objet</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span></pre></div>
+
+
+            <div class="docstring"><p>Utilise un objet consommable de l'inventaire sur une cible.</p>
+
+<p>Args:
+    objet (Consommable): L'objet à utiliser.
+    cible (Personnage): Le personnage sur lequel appliquer l'effet.</p>
 </div>
 
 
@@ -462,6 +470,7 @@ dépasse le seuil requis (boucle while pour multiples niveaux).</p>
                 <dd id="Hero.calcul_degats_sur" class="function"><a href="Personnage.html#Personnage.calcul_degats_sur">calcul_degats_sur</a></dd>
                 <dd id="Hero.subir_degats" class="function"><a href="Personnage.html#Personnage.subir_degats">subir_degats</a></dd>
                 <dd id="Hero.attaquer" class="function"><a href="Personnage.html#Personnage.attaquer">attaquer</a></dd>
+                <dd id="Hero.soigner" class="function"><a href="Personnage.html#Personnage.soigner">soigner</a></dd>
 
             </div>
                                 </dl>

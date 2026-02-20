@@ -39,6 +39,9 @@
                         <li>
                                 <a class="variable" href="#Ennemi.exp">exp</a>
                         </li>
+                        <li>
+                                <a class="variable" href="#Ennemi.recompenses">recompenses</a>
+                        </li>
                 </ul>
 
             </li>
@@ -63,32 +66,28 @@
 
                         <label class="view-source-button" for="mod-Ennemi-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">uniform</span>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.Personnage</span><span class="w"> </span><span class="kn">import</span> <span class="n">Personnage</span> 
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Ennemi</span><span class="p">(</span><span class="n">Personnage</span><span class="p">):</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">    Classe représentant un ennemi.</span>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">    </span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">    Hérite de Personnage et possède une valeur d&#39;expérience donnée au joueur</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">    en cas de défaite.</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">        Initialise un nouvel ennemi.</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">        Args:</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">            nom (str): Le nom de l&#39;ennemi.</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a><span class="sd">            arme (int, optional): Le bonus de l&#39;arme. Par défaut 0.</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="sd">            armure (int, optional): La valeur d&#39;armure. Par défaut 0.</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a><span class="sd">            exp (int, optional): L&#39;expérience donnée au vainqueur. Par défaut 10.</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.Personnage</span><span class="w"> </span><span class="kn">import</span> <span class="n">Personnage</span> 
+</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">src.Objet</span><span class="w"> </span><span class="kn">import</span> <span class="n">Arme</span><span class="p">,</span> <span class="n">Armure</span>
+</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a>
+</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Ennemi</span><span class="p">(</span><span class="n">Personnage</span><span class="p">):</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">    Classe représentant un ennemi lachant des récompenses à sa mort.</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="n">Arme</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="n">Armure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">        Initialise un nouvel ennemi.</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">        Args:</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">            nom (str): Le nom de l&#39;ennemi.</span>
+</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
+</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a><span class="sd">            arme (Arme, optional): L&#39;objet Arme équipé. Par défaut None.</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a><span class="sd">            armure (Armure, optional): L&#39;objet Armure équipé. Par défaut None.</span>
+</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a><span class="sd">            exp (int, optional): L&#39;expérience donnée au vainqueur. Par défaut 10.</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span>
+</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">recompenses</span> <span class="o">=</span> <span class="p">[]</span>
 </span></pre></div>
 
 
@@ -104,35 +103,29 @@
 
     </div>
     <a class="headerlink" href="#Ennemi"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Ennemi-6"><a href="#Ennemi-6"><span class="linenos"> 6</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Ennemi</span><span class="p">(</span><span class="n">Personnage</span><span class="p">):</span>
-</span><span id="Ennemi-7"><a href="#Ennemi-7"><span class="linenos"> 7</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Ennemi-8"><a href="#Ennemi-8"><span class="linenos"> 8</span></a><span class="sd">    Classe représentant un ennemi.</span>
-</span><span id="Ennemi-9"><a href="#Ennemi-9"><span class="linenos"> 9</span></a><span class="sd">    </span>
-</span><span id="Ennemi-10"><a href="#Ennemi-10"><span class="linenos">10</span></a><span class="sd">    Hérite de Personnage et possède une valeur d&#39;expérience donnée au joueur</span>
-</span><span id="Ennemi-11"><a href="#Ennemi-11"><span class="linenos">11</span></a><span class="sd">    en cas de défaite.</span>
-</span><span id="Ennemi-12"><a href="#Ennemi-12"><span class="linenos">12</span></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="Ennemi-13"><a href="#Ennemi-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
-</span><span id="Ennemi-14"><a href="#Ennemi-14"><span class="linenos">14</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Ennemi-15"><a href="#Ennemi-15"><span class="linenos">15</span></a><span class="sd">        Initialise un nouvel ennemi.</span>
-</span><span id="Ennemi-16"><a href="#Ennemi-16"><span class="linenos">16</span></a>
-</span><span id="Ennemi-17"><a href="#Ennemi-17"><span class="linenos">17</span></a><span class="sd">        Args:</span>
-</span><span id="Ennemi-18"><a href="#Ennemi-18"><span class="linenos">18</span></a><span class="sd">            nom (str): Le nom de l&#39;ennemi.</span>
-</span><span id="Ennemi-19"><a href="#Ennemi-19"><span class="linenos">19</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
-</span><span id="Ennemi-20"><a href="#Ennemi-20"><span class="linenos">20</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
-</span><span id="Ennemi-21"><a href="#Ennemi-21"><span class="linenos">21</span></a><span class="sd">            arme (int, optional): Le bonus de l&#39;arme. Par défaut 0.</span>
-</span><span id="Ennemi-22"><a href="#Ennemi-22"><span class="linenos">22</span></a><span class="sd">            armure (int, optional): La valeur d&#39;armure. Par défaut 0.</span>
-</span><span id="Ennemi-23"><a href="#Ennemi-23"><span class="linenos">23</span></a><span class="sd">            exp (int, optional): L&#39;expérience donnée au vainqueur. Par défaut 10.</span>
-</span><span id="Ennemi-24"><a href="#Ennemi-24"><span class="linenos">24</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Ennemi-25"><a href="#Ennemi-25"><span class="linenos">25</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
-</span><span id="Ennemi-26"><a href="#Ennemi-26"><span class="linenos">26</span></a>
-</span><span id="Ennemi-27"><a href="#Ennemi-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Ennemi-5"><a href="#Ennemi-5"><span class="linenos"> 5</span></a><span class="k">class</span><span class="w"> </span><span class="nc">Ennemi</span><span class="p">(</span><span class="n">Personnage</span><span class="p">):</span>
+</span><span id="Ennemi-6"><a href="#Ennemi-6"><span class="linenos"> 6</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Ennemi-7"><a href="#Ennemi-7"><span class="linenos"> 7</span></a><span class="sd">    Classe représentant un ennemi lachant des récompenses à sa mort.</span>
+</span><span id="Ennemi-8"><a href="#Ennemi-8"><span class="linenos"> 8</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="Ennemi-9"><a href="#Ennemi-9"><span class="linenos"> 9</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="n">Arme</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="n">Armure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+</span><span id="Ennemi-10"><a href="#Ennemi-10"><span class="linenos">10</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Ennemi-11"><a href="#Ennemi-11"><span class="linenos">11</span></a><span class="sd">        Initialise un nouvel ennemi.</span>
+</span><span id="Ennemi-12"><a href="#Ennemi-12"><span class="linenos">12</span></a>
+</span><span id="Ennemi-13"><a href="#Ennemi-13"><span class="linenos">13</span></a><span class="sd">        Args:</span>
+</span><span id="Ennemi-14"><a href="#Ennemi-14"><span class="linenos">14</span></a><span class="sd">            nom (str): Le nom de l&#39;ennemi.</span>
+</span><span id="Ennemi-15"><a href="#Ennemi-15"><span class="linenos">15</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
+</span><span id="Ennemi-16"><a href="#Ennemi-16"><span class="linenos">16</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
+</span><span id="Ennemi-17"><a href="#Ennemi-17"><span class="linenos">17</span></a><span class="sd">            arme (Arme, optional): L&#39;objet Arme équipé. Par défaut None.</span>
+</span><span id="Ennemi-18"><a href="#Ennemi-18"><span class="linenos">18</span></a><span class="sd">            armure (Armure, optional): L&#39;objet Armure équipé. Par défaut None.</span>
+</span><span id="Ennemi-19"><a href="#Ennemi-19"><span class="linenos">19</span></a><span class="sd">            exp (int, optional): L&#39;expérience donnée au vainqueur. Par défaut 10.</span>
+</span><span id="Ennemi-20"><a href="#Ennemi-20"><span class="linenos">20</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Ennemi-21"><a href="#Ennemi-21"><span class="linenos">21</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
+</span><span id="Ennemi-22"><a href="#Ennemi-22"><span class="linenos">22</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span>
+</span><span id="Ennemi-23"><a href="#Ennemi-23"><span class="linenos">23</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">recompenses</span> <span class="o">=</span> <span class="p">[]</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Classe représentant un ennemi.</p>
-
-<p>Hérite de Personnage et possède une valeur d'expérience donnée au joueur
-en cas de défaite.</p>
+            <div class="docstring"><p>Classe représentant un ennemi lachant des récompenses à sa mort.</p>
 </div>
 
 
@@ -140,27 +133,27 @@ en cas de défaite.</p>
                                         <input id="Ennemi.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">Ennemi</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">nom</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">force</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">arme</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">armure</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>,</span><span class="param">	<span class="n">exp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span></span>)</span>
+        <span class="name">Ennemi</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">nom</span><span class="p">:</span> <span class="nb">str</span>,</span><span class="param">	<span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">force</span><span class="p">:</span> <span class="nb">int</span>,</span><span class="param">	<span class="n">arme</span><span class="p">:</span> <span class="n"><a href="Objet.html#Arme">src.Objet.Arme</a></span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">armure</span><span class="p">:</span> <span class="n"><a href="Objet.html#Armure">src.Objet.Armure</a></span> <span class="o">=</span> <span class="kc">None</span>,</span><span class="param">	<span class="n">exp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span></span>)</span>
 
                 <label class="view-source-button" for="Ennemi.__init__-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#Ennemi.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="Ennemi.__init__-13"><a href="#Ennemi.__init__-13"><span class="linenos">13</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
-</span><span id="Ennemi.__init__-14"><a href="#Ennemi.__init__-14"><span class="linenos">14</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="Ennemi.__init__-15"><a href="#Ennemi.__init__-15"><span class="linenos">15</span></a><span class="sd">        Initialise un nouvel ennemi.</span>
-</span><span id="Ennemi.__init__-16"><a href="#Ennemi.__init__-16"><span class="linenos">16</span></a>
-</span><span id="Ennemi.__init__-17"><a href="#Ennemi.__init__-17"><span class="linenos">17</span></a><span class="sd">        Args:</span>
-</span><span id="Ennemi.__init__-18"><a href="#Ennemi.__init__-18"><span class="linenos">18</span></a><span class="sd">            nom (str): Le nom de l&#39;ennemi.</span>
-</span><span id="Ennemi.__init__-19"><a href="#Ennemi.__init__-19"><span class="linenos">19</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
-</span><span id="Ennemi.__init__-20"><a href="#Ennemi.__init__-20"><span class="linenos">20</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
-</span><span id="Ennemi.__init__-21"><a href="#Ennemi.__init__-21"><span class="linenos">21</span></a><span class="sd">            arme (int, optional): Le bonus de l&#39;arme. Par défaut 0.</span>
-</span><span id="Ennemi.__init__-22"><a href="#Ennemi.__init__-22"><span class="linenos">22</span></a><span class="sd">            armure (int, optional): La valeur d&#39;armure. Par défaut 0.</span>
-</span><span id="Ennemi.__init__-23"><a href="#Ennemi.__init__-23"><span class="linenos">23</span></a><span class="sd">            exp (int, optional): L&#39;expérience donnée au vainqueur. Par défaut 10.</span>
-</span><span id="Ennemi.__init__-24"><a href="#Ennemi.__init__-24"><span class="linenos">24</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="Ennemi.__init__-25"><a href="#Ennemi.__init__-25"><span class="linenos">25</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
-</span><span id="Ennemi.__init__-26"><a href="#Ennemi.__init__-26"><span class="linenos">26</span></a>
-</span><span id="Ennemi.__init__-27"><a href="#Ennemi.__init__-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="Ennemi.__init__-9"><a href="#Ennemi.__init__-9"><span class="linenos"> 9</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">force</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">arme</span><span class="p">:</span> <span class="n">Arme</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">armure</span><span class="p">:</span> <span class="n">Armure</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+</span><span id="Ennemi.__init__-10"><a href="#Ennemi.__init__-10"><span class="linenos">10</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="Ennemi.__init__-11"><a href="#Ennemi.__init__-11"><span class="linenos">11</span></a><span class="sd">        Initialise un nouvel ennemi.</span>
+</span><span id="Ennemi.__init__-12"><a href="#Ennemi.__init__-12"><span class="linenos">12</span></a>
+</span><span id="Ennemi.__init__-13"><a href="#Ennemi.__init__-13"><span class="linenos">13</span></a><span class="sd">        Args:</span>
+</span><span id="Ennemi.__init__-14"><a href="#Ennemi.__init__-14"><span class="linenos">14</span></a><span class="sd">            nom (str): Le nom de l&#39;ennemi.</span>
+</span><span id="Ennemi.__init__-15"><a href="#Ennemi.__init__-15"><span class="linenos">15</span></a><span class="sd">            vie_max (int): Les points de vie maximums.</span>
+</span><span id="Ennemi.__init__-16"><a href="#Ennemi.__init__-16"><span class="linenos">16</span></a><span class="sd">            force (int): La force d&#39;attaque de base.</span>
+</span><span id="Ennemi.__init__-17"><a href="#Ennemi.__init__-17"><span class="linenos">17</span></a><span class="sd">            arme (Arme, optional): L&#39;objet Arme équipé. Par défaut None.</span>
+</span><span id="Ennemi.__init__-18"><a href="#Ennemi.__init__-18"><span class="linenos">18</span></a><span class="sd">            armure (Armure, optional): L&#39;objet Armure équipé. Par défaut None.</span>
+</span><span id="Ennemi.__init__-19"><a href="#Ennemi.__init__-19"><span class="linenos">19</span></a><span class="sd">            exp (int, optional): L&#39;expérience donnée au vainqueur. Par défaut 10.</span>
+</span><span id="Ennemi.__init__-20"><a href="#Ennemi.__init__-20"><span class="linenos">20</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="Ennemi.__init__-21"><a href="#Ennemi.__init__-21"><span class="linenos">21</span></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">nom</span><span class="p">,</span> <span class="n">vie_max</span><span class="p">,</span> <span class="n">force</span><span class="p">,</span> <span class="n">arme</span><span class="p">,</span> <span class="n">armure</span><span class="p">)</span>
+</span><span id="Ennemi.__init__-22"><a href="#Ennemi.__init__-22"><span class="linenos">22</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span>
+</span><span id="Ennemi.__init__-23"><a href="#Ennemi.__init__-23"><span class="linenos">23</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">recompenses</span> <span class="o">=</span> <span class="p">[]</span>
 </span></pre></div>
 
 
@@ -170,8 +163,8 @@ en cas de défaite.</p>
     nom (str): Le nom de l'ennemi.
     vie_max (int): Les points de vie maximums.
     force (int): La force d'attaque de base.
-    arme (int, optional): Le bonus de l'arme. Par défaut 0.
-    armure (int, optional): La valeur d'armure. Par défaut 0.
+    arme (Arme, optional): L'objet Arme équipé. Par défaut None.
+    armure (Armure, optional): L'objet Armure équipé. Par défaut None.
     exp (int, optional): L'expérience donnée au vainqueur. Par défaut 10.</p>
 </div>
 
@@ -184,6 +177,17 @@ en cas de défaite.</p>
         
     </div>
     <a class="headerlink" href="#Ennemi.exp"></a>
+    
+    
+
+                            </div>
+                            <div id="Ennemi.recompenses" class="classattr">
+                                <div class="attr variable">
+            <span class="name">recompenses</span>
+
+        
+    </div>
+    <a class="headerlink" href="#Ennemi.recompenses"></a>
     
     
 
@@ -202,6 +206,7 @@ en cas de défaite.</p>
                 <dd id="Ennemi.calcul_degats_sur" class="function"><a href="Personnage.html#Personnage.calcul_degats_sur">calcul_degats_sur</a></dd>
                 <dd id="Ennemi.subir_degats" class="function"><a href="Personnage.html#Personnage.subir_degats">subir_degats</a></dd>
                 <dd id="Ennemi.attaquer" class="function"><a href="Personnage.html#Personnage.attaquer">attaquer</a></dd>
+                <dd id="Ennemi.soigner" class="function"><a href="Personnage.html#Personnage.soigner">soigner</a></dd>
 
             </div>
                                 </dl>
