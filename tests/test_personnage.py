@@ -2,7 +2,7 @@ import math
 import pytest
 
 from src.Personnage import Personnage
-from src.Objet import Arme, Armure # Nouvel import indispensable !
+from src.Objet import Arme, Armure
 
 
 # ---------
@@ -191,4 +191,3 @@ def test_mini_combat_deterministe(monkeypatch):
     # Tour 2 : A -> B
     assert A.attaquer(B) == 3
     assert B.vie == 4  # encore vivant
-    
