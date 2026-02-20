@@ -1,16 +1,11 @@
-import math
-from random import uniform
 from src.Personnage import Personnage 
-from src.Objet import Objet
+from src.Objet import Arme, Armure
 
 class Ennemi(Personnage):
     """
-    Classe représentant un ennemi.
-    
-    Hérite de Personnage et possède une valeur d'expérience donnée au joueur
-    en cas de défaite.
+    Classe représentant un ennemi lachant des récompenses à sa mort.
     """
-    def __init__(self, nom: str, vie_max: int, force: int, arme: int = 0, armure: int = 0, exp: int = 10):
+    def __init__(self, nom: str, vie_max: int, force: int, arme: Arme = None, armure: Armure = None, exp: int = 10):
         """
         Initialise un nouvel ennemi.
 
@@ -18,12 +13,10 @@ class Ennemi(Personnage):
             nom (str): Le nom de l'ennemi.
             vie_max (int): Les points de vie maximums.
             force (int): La force d'attaque de base.
-            arme (int, optional): Le bonus de l'arme. Par défaut 0.
-            armure (int, optional): La valeur d'armure. Par défaut 0.
+            arme (Arme, optional): L'objet Arme équipé. Par défaut None.
+            armure (Armure, optional): L'objet Armure équipé. Par défaut None.
             exp (int, optional): L'expérience donnée au vainqueur. Par défaut 10.
         """
         super().__init__(nom, vie_max, force, arme, armure)
-
         self.exp = exp
-
         self.recompenses = []

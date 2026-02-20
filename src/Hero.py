@@ -2,36 +2,31 @@ import math
 from random import uniform
 from src.Personnage import Personnage
 from src.Inventaire import Inventaire
-from src.Objet import Consommable 
+from src.Objet import Consommable, Arme, Armure
 
 class Hero(Personnage):
     """
-    Classe représentant le héros du jeu.
-    
-    Gère le système de niveaux, l'expérience et l'amélioration des statistiques.
+    Classe représentant le héros du jeu avec son inventaire et son système de progression.
     """
-    def __init__(self, nom:str, vie_max:int, force:int, arme:int=0, armure:int=0):
+    def __init__(self, nom: str, vie_max: int, force: int, arme: Arme = None, armure: Armure = None):
         """
-        Initialise le héros au niveau 1 avec 0 expérience.
+        Initialise le héros au niveau 1 avec un inventaire vide.
 
         Args:
             nom (str): Le nom du héros.
             vie_max (int): Les points de vie maximums.
             force (int): La force d'attaque de base.
-            arme (int, optional): Le bonus de l'arme. Par défaut 0.
-            armure (int, optional): La valeur d'armure. Par défaut 0.
+            arme (Arme, optional): L'objet Arme équipé. Par défaut None.
+            armure (Armure, optional): L'objet Armure équipé. Par défaut None.
         """
         super().__init__(nom, vie_max, force, arme, armure)
-
         self.niveau = 1
         self.exp = 0
         self.inventaire = Inventaire()
 
-    def exp_pour_prochain_niveau(self):
+    def exp_pour_prochain_niveau(self) -> int:
         """
         Calcule l'expérience requise pour atteindre le niveau suivant.
-        
-        Formule : 100 * (niveau^2 + niveau).
 
         Returns:
             int: La quantité totale d'XP nécessaire.
@@ -41,10 +36,7 @@ class Hero(Personnage):
     def monter_niveau(self):
         """
         Fait passer le héros au niveau supérieur.
-        
-        Augmente le niveau de 1 et améliore les statistiques (vie_max, force,
-        arme, armure) d'un pourcentage aléatoire entre 1% et 10%.
-        La vie est restaurée au maximum après l'amélioration.
+        Augmente les statistiques naturelles (vie_max, force) et restaure la vie.
         """
         self.niveau += 1
 
@@ -55,41 +47,30 @@ class Hero(Personnage):
         pourcentage = uniform(1, 10)
         facteur = 1 + (pourcentage / 100)
         self.force = math.ceil(self.force * facteur)
-
-        pourcentage = uniform(1, 10)
-        facteur = 1 + (pourcentage / 100)
-        self.arme = math.ceil(self.arme * facteur)
-
-        pourcentage = uniform(1, 10)
-        facteur = 1 + (pourcentage / 100)
-        self.armure = math.ceil(self.armure * facteur)
-
+        
         self.vie = self.vie_max
 
-    def gagner_exp(self, quantite):
+    def gagner_exp(self, quantite: int):
         """
-        Ajoute de l'expérience au héros.
-        
-        Gère automatiquement la montée de niveau si l'expérience accumulée
-        dépasse le seuil requis (boucle while pour multiples niveaux).
+        Ajoute de l'expérience au héros et gère les montées de niveau.
 
         Args:
             quantite (int): La quantité d'expérience gagnée.
         """
-        if quantite<= 0:
+        if quantite <= 0:
             return
-        
         self.exp += quantite
-
         while self.exp >= self.exp_pour_prochain_niveau():
             self.monter_niveau()
 
-    
-    def utiliser_objet(self, objet: Consommable, cible: "Personnage") -> None:
+    def utiliser_objet(self, objet: Consommable, cible: Personnage) -> None:
         """
         Utilise un objet consommable de l'inventaire sur une cible.
+
+        Args:
+            objet (Consommable): L'objet à utiliser.
+            cible (Personnage): Le personnage sur lequel appliquer l'effet.
         """
         if self.inventaire.contient(objet):
             objet.utiliser(cible)
             self.inventaire.retirer(objet, 1)
-            
