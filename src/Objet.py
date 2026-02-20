@@ -1,3 +1,5 @@
+from src import Personnage
+
 class Objet:
     """
     Classe de base pour tous les objets du jeu.
