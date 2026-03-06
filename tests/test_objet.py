@@ -16,6 +16,14 @@ def test_potion_soigne_personnage():
     # La cible doit passer de 10 à 30 PV
     assert cible.vie == 30
 
+def test_potion_soigne_personnage_mort():
+    cible = Personnage("Test",vie_max=50, force=5)
+    cible.vie = 0
+    potion = Potion("Soin", "Rend 20 PV",quantite=20)
+    
+    # La cible ne doit pas être soignée en étant morte
+    assert cible.vie == 0
+
 def test_bombe_inflige_degats():
     cible = Personnage("Test", vie_max=50, force=5)
     bombe = Bombe("Explosif", "Fait 15 dégâts", degats=15)
@@ -25,6 +33,14 @@ def test_bombe_inflige_degats():
     # La cible subit 15 dégâts purs : 50 - 15 = 35 PV
     assert cible.vie == 35 
 
+def test_bombe_inflige_degats_en_dessous_0():
+    cible = Personnage("Test", vie_max=0, force=5)
+    bombe = Bombe("Explosif", "Fait 15 dégâts", degats=15)
+    
+    bombe.utiliser(cible)
+    
+    # La cible subit 15 dégats en étant morte, elle ne doit pas avoir moins que 0 de vie
+    assert cible.vie == 0
 
 # -----------------------
 # Tests des Équipements
