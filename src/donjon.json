@@ -1,0 +1,112 @@
+{
+  "salle_depart": "entree_donjon",
+  "salles": {
+    "entree_donjon": {
+      "nom": "Entrée du Donjon",
+      "description": "Une lourde porte de pierre s'est refermée derrière vous. L'air est moite. Un long couloir s'enfonce dans les ténèbres vers le NORD.",
+      "a_lit": false,
+      "objets": [
+        {"type": "Potion", "nom": "Petite Potion", "description": "Restaure 20 PV", "quantite": 20}
+      ],
+      "ennemis": [],
+      "connexions": {
+        "NORD": "couloir_sombre"
+      }
+    },
+    "couloir_sombre": {
+      "nom": "Couloir Sombre",
+      "description": "Des torches vacillantes éclairent faiblement les murs. Vous entendez des grognements.",
+      "a_lit": false,
+      "objets": [],
+      "ennemis": [
+        {
+          "nom": "Gobelin Eclaireur",
+          "vie_max": 40,
+          "force": 15,
+          "arme": null,
+          "armure": null,
+          "exp": 25,
+          "recompenses": [
+            {"type": "Bombe", "nom": "Bombe artisanale", "description": "Inflige 30 dégâts", "degats": 30}
+          ]
+        }
+      ],
+      "connexions": {
+        "SUD": "entree_donjon",
+        "EST": "armurerie",
+        "NORD": "salle_banquet"
+      }
+    },
+    "armurerie": {
+      "nom": "Ancienne Armurerie",
+      "description": "Des râteliers d'armes poussiéreux recouvrent les murs. Une paillasse en bon état se trouve dans un coin.",
+      "a_lit": true,
+      "objets": [
+        {"type": "Arme", "nom": "Épée en Fer", "description": "Une lame aiguisée.", "bonus": 15},
+        {"type": "Armure", "nom": "Cotte de mailles", "description": "Protège bien des coups.", "bonus": 8}
+      ],
+      "ennemis": [],
+      "connexions": {
+        "OUEST": "couloir_sombre"
+      }
+    },
+    "salle_banquet": {
+      "nom": "Salle de Banquet Dévastée",
+      "description": "De longues tables sont renversées. Un immense escalier monte vers l'étage supérieur. Un étrange cercle lumineux crépite sur le sol.",
+      "a_lit": false,
+      "objets": [
+        {"type": "Bombe", "nom": "Grosse Bombe", "description": "Explosif puissant", "degats": 50}
+      ],
+      "ennemis": [
+        {
+          "nom": "Orc Brutal",
+          "vie_max": 100,
+          "force": 25,
+          "arme": {"nom": "Hache rouillée", "description": "Lourde et dangereuse", "bonus": 5},
+          "armure": null,
+          "exp": 50,
+          "recompenses": []
+        }
+      ],
+      "connexions": {
+        "SUD": "couloir_sombre",
+        "HAUT": "chambre_du_boss",
+        "TELEPORTEUR": "sanctuaire_secret"
+      }
+    },
+    "sanctuaire_secret": {
+      "nom": "Sanctuaire Secret",
+      "description": "Une petite pièce paisible, cachée du reste du donjon. L'endroit idéal pour se reposer.",
+      "a_lit": true,
+      "objets": [
+        {"type": "Potion", "nom": "Grande Potion", "description": "Restaure 100 PV", "quantite": 100}
+      ],
+      "ennemis": [],
+      "connexions": {
+        "TELEPORTEUR": "salle_banquet"
+      }
+    },
+    "chambre_du_boss": {
+      "nom": "Chambre du Seigneur",
+      "description": "Une pièce luxueuse mais terrifiante. Le maître des lieux vous attend.",
+      "a_lit": false,
+      "objets": [],
+      "ennemis": [
+        {
+          "nom": "Chevalier Déchu",
+          "vie_max": 250,
+          "force": 40,
+          "arme": {"nom": "Épée Maudite", "description": "Absorbe la lumière", "bonus": 20},
+          "armure": {"nom": "Armure d'Obsidienne", "description": "Impénétrable", "bonus": 15},
+          "exp": 200,
+          "recompenses": [
+            {"type": "Arme", "nom": "Épée Légendaire", "description": "L'arme ultime", "bonus": 40}
+          ]
+        }
+      ],
+      "connexions": {
+        "BAS": "salle_banquet"
+      }
+    }
+  }
+}
