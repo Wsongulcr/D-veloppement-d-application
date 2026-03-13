@@ -7,7 +7,7 @@ class Salle:
         self.id = id_salle
         self.nom = nom
         self.description = description
-        self.a_un_lit = a_un_lit
+        self.a_lit = a_lit
         
         # On initialise les contenus à vide pour le moment
         self.objets = []
