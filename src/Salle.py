@@ -26,3 +26,36 @@ class Salle:
     def ajouter_connexion(self, direction: str, salle_destination: "Salle") -> None:
         """Ajoute une connexion vers une autre salle."""
         self.connexions[direction] = salle_destination
+
+
+    def utiliser_lit(self, hero: Hero) -> bool:
+        """
+        Permet au héros de se soigner entièrement s'il y a un lit et aucun ennemi.
+
+        Args:
+            hero (Hero): Le héros qui tente de dormir.
+
+        Returns:
+            bool: True si le héros s'est reposé, False sinon.
+        """
+        if self.a_lit and self.est_vide():
+            hero.soigner(hero.vie_max)
+            return True
+        return False
+
+    def recuperer_objets(self, hero: Hero) -> bool:
+        """
+        Transfère tous les objets de la salle vers le héros s'il n'y a aucun ennemi.
+
+        Args:
+            hero (Hero): Le héros qui ramasse les objets.
+
+        Returns:
+            bool: True si des objets ont été ramassés, False sinon.
+        """
+        if self.est_vide() and len(self.objets) > 0:
+            for objet in self.objets:
+                hero.ramasser_butin(objet)
+            self.objets.clear()
+            return True
+        return False
