@@ -74,3 +74,34 @@ class Hero(Personnage):
         if self.inventaire.contient(objet):
             objet.utiliser(cible)
             self.inventaire.retirer(objet, 1)
+
+    def ramasser_butin(self, objet: Objet):
+        """
+        Traite un objet ramassé dans une salle ou sur un ennemi.
+        Les consommables vont dans l'inventaire.
+        Les équipements sont équipés automatiquement s'ils sont meilleurs.
+        """
+        # Si c'est un consommable (Potion, Bombe)
+        if isinstance(objet, Consommable):
+            self.inventaire.ajouter(objet, 1)
+            print(f"{self.nom} a ramassé un consommable : {objet.nom} !")
+            
+        # Si c'est une Arme
+        elif isinstance(objet, Arme):
+            # On équipe si on a rien, ou si le bonus est strictement supérieur
+            if self.arme is None or objet.bonus > self.arme.bonus:
+                ancien_nom = self.arme.nom if self.arme else "Rien"
+                self.arme = objet
+                print(f"{self.nom} s'équipe de {objet.nom} ! (Remplace : {ancien_nom})")
+            else:
+                print(f"{self.nom} ignore {objet.nom}, son arme actuelle est meilleure.")
+                
+        # Si c'est une Armure
+        elif isinstance(objet, Armure):
+            # On équipe si on a rien, ou si le bonus est strictement supérieur
+            if self.armure is None or objet.bonus > self.armure.bonus:
+                ancien_nom = self.armure.nom if self.armure else "Rien"
+                self.armure = objet
+                print(f"{self.nom} s'équipe de {objet.nom} ! (Remplace : {ancien_nom})")
+            else:
+                print(f"{self.nom} ignore {objet.nom}, son armure actuelle est meilleure.")
