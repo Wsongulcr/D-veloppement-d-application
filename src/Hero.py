@@ -75,33 +75,37 @@ class Hero(Personnage):
             objet.utiliser(cible)
             self.inventaire.retirer(objet, 1)
 
-    def ramasser_butin(self, objet: Objet):
+    def ramasser_butin(self, objet: "Objet") -> str:
         """
         Traite un objet ramassé dans une salle ou sur un ennemi.
         Les consommables vont dans l'inventaire.
-        Les équipements sont équipés automatiquement s'ils sont meilleurs.
+        Les équipements remplacent les anciens s'ils sont meilleurs.
+
+        Args:
+            objet (Objet): L'objet ramassé (Consommable, Arme ou Armure).
+
+        Returns:
+            str: Un message textuel décrivant ce qui s'est passé (pour affichage par l'UI).
         """
-        # Si c'est un consommable (Potion, Bombe)
+        # Gestion des consommables (Potions, Bombes...)
         if isinstance(objet, Consommable):
             self.inventaire.ajouter(objet, 1)
-            print(f"{self.nom} a ramassé un consommable : {objet.nom} !")
+            return f"{self.nom} a ramassé : {objet.nom}."
             
-        # Si c'est une Arme
+        # Gestion des armes
         elif isinstance(objet, Arme):
-            # On équipe si on a rien, ou si le bonus est strictement supérieur
+            # On s'équipe si on n'a rien, ou si le bonus est strictement supérieur
             if self.arme is None or objet.bonus > self.arme.bonus:
-                ancien_nom = self.arme.nom if self.arme else "Rien"
                 self.arme = objet
-                print(f"{self.nom} s'équipe de {objet.nom} ! (Remplace : {ancien_nom})")
-            else:
-                print(f"{self.nom} ignore {objet.nom}, son arme actuelle est meilleure.")
+                return f"{self.nom} s'équipe de l'arme : {objet.nom}."
+            return f"{self.nom} ignore {objet.nom} (son arme actuelle est meilleure)."
                 
-        # Si c'est une Armure
+        # Gestion des armures
         elif isinstance(objet, Armure):
-            # On équipe si on a rien, ou si le bonus est strictement supérieur
+            # On s'équipe si on n'a rien, ou si le bonus est strictement supérieur
             if self.armure is None or objet.bonus > self.armure.bonus:
-                ancien_nom = self.armure.nom if self.armure else "Rien"
                 self.armure = objet
-                print(f"{self.nom} s'équipe de {objet.nom} ! (Remplace : {ancien_nom})")
-            else:
-                print(f"{self.nom} ignore {objet.nom}, son armure actuelle est meilleure.")
+                return f"{self.nom} s'équipe de l'armure : {objet.nom}."
+            return f"{self.nom} ignore {objet.nom} (son armure actuelle est meilleure)."
+            
+        return ""
