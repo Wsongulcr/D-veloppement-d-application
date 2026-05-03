@@ -97,3 +97,68 @@ class ActionFuir(Action):
             return "Vous fuyez lâchement vers la salle précédente !"
         return "La fuite a échoué."
 
+class ActionAttaquer(Action):
+    def __init__(self):
+        super().__init__("Attaquer")
+
+    def est_possible(self, donjon: Donjon, heros: Hero) -> bool:
+        # Possible uniquement si la salle contient au moins un ennemi[cite: 19]
+        return not donjon.salle_actuelle.est_vide()
+
+    def executer(self, donjon: Donjon, heros: Hero, *args) -> str:
+        salle = donjon.salle_actuelle
+        # On cible le premier ennemi vivant de la salle
+        cible = next((e for e in salle.ennemis if e.est_vivant()), None)
+        
+        if cible:
+            degats = heros.attaquer(cible)
+            message = f"Vous attaquez {cible.nom} et lui infligez {degats} dégâts ! (PV restants: {cible.vie}/{cible.vie_max})\n"
+            
+            # Si l'attaque tue l'ennemi
+            if not cible.est_vivant():
+                message += f"Bravo, vous avez vaincu {cible.nom} !\n"
+                heros.gagner_exp(cible.exp)
+                message += f"Vous gagnez {cible.exp} points d'expérience.\n"
+                
+                # Ramassage des récompenses de l'ennemi
+                for butin in cible.recompenses:
+                    msg_loot = heros.ramasser_butin(butin)
+                    message += f"{msg_loot}\n"
+                    
+            return message.strip()
+        return "Il n'y a personne à attaquer."
+    
+
+class ActionUtiliser(Action):
+    def __init__(self):
+        super().__init__("Utiliser")
+
+    def est_possible(self, donjon: Donjon, heros: Hero) -> bool:
+        # Possible si le héros possède au moins un objet dans son inventaire[cite: 19]
+        return len(heros.inventaire._objets) > 0
+
+    def executer(self, donjon: Donjon, heros: Hero, nom_objet: str = "") -> str:
+        if not nom_objet:
+            return "Vous devez préciser quel objet utiliser."
+
+        # Vérifier si l'objet est dans l'inventaire
+        if nom_objet in heros.inventaire._objets:
+            pile = heros.inventaire._objets[nom_objet]
+            objet = pile.objet
+            
+            # Déterminer la cible (le héros par défaut)
+            salle = donjon.salle_actuelle
+            cible = heros
+            
+            # Si c'est une bombe, la cible devient le monstre
+            if "Bombe" in objet.__class__.__name__ or "Bombe" in objet.nom:
+                ennemi = next((e for e in salle.ennemis if e.est_vivant()), None)
+                if ennemi:
+                    cible = ennemi
+                else:
+                    return "Il n'y a pas d'ennemi sur qui lancer cela !"
+
+            heros.utiliser_objet(objet, cible)
+            return f"Vous avez utilisé {objet.nom} sur {cible.nom}."
+            
+        return "Objet introuvable dans l'inventaire."
